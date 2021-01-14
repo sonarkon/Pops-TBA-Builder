@@ -1,14 +1,21 @@
-﻿using UnityEngine;
+using UnityEngine;
+using System;
+using extOSC;
+
 
 public class RoomTracker : MonoBehaviour
 {
+    #region Private Vars
+        public OSCTransmitter globalTransmitter; // add the global transmitter from project
+		public string myOscAddress = "/myOscLabel"; // to be set in the project
+        public int cueID; // cue to send, to be set in the project
+    #endregion
+
     [SerializeField] Room startingRoom = null;
     Room currentRoom = null;
-
     TextPrompt textPrompt;
     DefaultValues defaultValues;
     ActionHandler actionHandler;
-
     private void Start()
     {
         textPrompt = FindObjectOfType<TextPrompt>();
@@ -103,6 +110,7 @@ public class RoomTracker : MonoBehaviour
     public void changeRoomViaRoomConnection(string userInput)
     {
         Room newRoom = findRoomConnection(userInput);
+		var message = new OSCMessage(myOscAddress);
 
         if (newRoom == null)
             return;
@@ -110,9 +118,16 @@ public class RoomTracker : MonoBehaviour
         if (newRoom.isInitialized == false)
             newRoom.initializeRuntimeVariables();
 
+        string raumFull = newRoom.ToString();
+        string raum_short = raumFull.Substring(0, raumFull.Length-6);
+        message.AddValue(OSCValue.String(raum_short));
+        globalTransmitter.Send(message); // the global OSC Manager's transmitter sends message
+        Debug.Log("from: " + currentRoom + "going to " + raum_short);
+
         currentRoom = newRoom;
         actionHandler.executeActions(currentRoom, currentRoom.roomEntryActions);
         printCurrentRoomEntryText();
+        
     }
 
     private Room findRoomConnection(string userInput)
