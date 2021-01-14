@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using System.Text;
 using UnityEngine;
@@ -150,7 +150,8 @@ public class InputParser : MonoBehaviour
 
         if (words.Length == 1)
         {
-            textPrompt.printText(failText);
+            //textPrompt.printText(failText);
+            roomTracker.changeRoomViaRoomConnection(input);
             return;
         }
 
@@ -171,11 +172,15 @@ public class InputParser : MonoBehaviour
         switch (command)
         {
             case "inv":
-            case "inventory":
+            case "inventar":
             case "i":
                 player.openInventory();
                 break;
+            case "denke":
+            case "denk":
             case "look":
+            case "gedanken":
+            case "denk nach":
                 if (input.Split(' ').Length != 1)
                 {
                     successFlag = false;
@@ -183,19 +188,26 @@ public class InputParser : MonoBehaviour
                 }
                 roomTracker.printCurrentLookText();
                 break;
-            case "move":
+            case "gehe zu":
+            case "gehe":
             case "go":
+            case null:
+            case "":
                 roomTracker.changeRoomViaRoomConnection(input);
                 break;
+            case "hilfe":
             case "help":
                 textPrompt.printText(defaultValues.HelpText);
                 break;
             // Fluff/secret commands
             case "die":
-                textPrompt.printText("\"Eh, guess I'll die\". You suffocate yourself to death. Not sure why you'd want to do that.");
+            case "stirb":
+                textPrompt.printText("\"SCHLAGANFALL\"\n Gehirnschlag, Hirnschlag\n eine plötzlich eintretende, meist mit Bewußtlosigkeit und Lähmungen einhergende Ausschaltung von mehr oder minder großen Hirnteilen. S. trifft meist ein durc Bersten eines Hirngefäßes (Gehirnblutung) infolge arterioskletischer Schädigung seiner Wand. \nDas Dorf steht unberührt.\nAlles in allem ein grünes Tal.");
                 textPrompt.killPlayer();
                 break;
+                // bei Eingabe ohne vorausgehenden Befehl versucht das Spiel einen Raum zu betreten z.B. "Ja" 
             default:
+                //roomTracker.changeRoomViaRoomConnection(input);
                 successFlag = false;
                 break;
         }
@@ -213,19 +225,22 @@ public class InputParser : MonoBehaviour
         switch (command)
         {
             // eat
-            case "eat":
-            case "devour":
-            case "consume":
+            case "iss":
+            case "esse":
+            case "ess":
+            case "essen":
+            case "verzehre":
+            case "friss":
                 actionHandler.eatObject(targetObject);
                 break;
             // drink
-            case "drink":
+            case "trink":
                 actionHandler.drinkObject(targetObject);
                 break;
             // talk
-            case "talk":
-            case "speak":
-            case "say":
+            case "rede":
+            case "sprich":
+            case "sage":
                 actionHandler.talkToPerson(targetObject);
                 break;
             // kill
@@ -236,43 +251,56 @@ public class InputParser : MonoBehaviour
                 actionHandler.killPerson(targetObject);
                 break;
             // break
-            case "break":
-            case "smash":
-            case "destroy":
+            case "zerstöre":
+            case "wirf":
+            case "kaputt":
+            case "zerschlage":
                 actionHandler.BreakObject(targetObject);
                 break;
             // sit
             case "sit":
-            case "seat":
+            case "sitze":
+            case "setz":
+            case "setzen":
+            case "hinsetzen":
                 actionHandler.sitOnObject(targetObject);
                 break;
             // use
             case "use":
-            case "activate":
+            case "benutze":
+            case "nutze":
+            case "brauche":
+            case "benutz":
+            case "schließe":
+            case "zumachen":
+            case "schhließen":
                 actionHandler.useObject(targetObject);
                 break;
             // pickup
             case "pickup":
-            case "grab":
-            case "pick":
+            case "nimm":
+            case "nehme":
             case "take":
-            case "steal":
+            case "greif":
                 actionHandler.pickupObject(targetObject);
                 break;
             // wear
             case "wear":
-            case "equip":
-            case "put":
+            case "trage":
+            case "anziehen":
                 actionHandler.wearObject(targetObject);
                 break;
             // open
             case "open":
-            case "unlock":
-            case "reveal":
+            case "öffne":
+            case "öffnen":
                 actionHandler.openObject(targetObject);
                 break;
             // look at
             case "look":
+            case "schau":
+            case "schaue":
+            case "anschauen":
                 actionHandler.lookAtObject(targetObject);
                 break;
             // unknown command
