@@ -198,11 +198,15 @@ public class InputParser : MonoBehaviour
             case "hilfe":
             case "help":
                 textPrompt.printText(defaultValues.HelpText);
+                //returns to current Room
+                textPrompt.printText(". \n");
+                roomTracker.forceChangeRoom(roomTracker.getCurrentRoom());
                 break;
             // Fluff/secret commands
             case "die":
             case "stirb":
-                textPrompt.printText("\"SCHLAGANFALL\"\n Gehirnschlag, Hirnschlag\n eine plötzlich eintretende, meist mit Bewußtlosigkeit und Lähmungen einhergende Ausschaltung von mehr oder minder großen Hirnteilen. S. trifft meist ein durc Bersten eines Hirngefäßes (Gehirnblutung) infolge arterioskletischer Schädigung seiner Wand. \nDas Dorf steht unberührt.\nAlles in allem ein grünes Tal.");
+                textPrompt.printText("\"SCHLAGANFALL\"\n Gehirnschlag, Hirnschlag\n eine plötzlich eintretende, meist mit  Bewußtlosigkeit und Lähmungen einhergende  Ausschaltung von mehr oder minder großen Hirnteilen. S. trifft meist ein durc Bersten eines Hirngefäßes (Gehirnblutung) infolge arterioskletischer Schädigung seiner Wand.");
+                textPrompt.printText("\nDas Dorf steht unberührt.\nAlles in allem ein grünes Tal.");
                 textPrompt.killPlayer();
                 break;
                 // bei Eingabe ohne vorausgehenden Befehl versucht das Spiel einen Raum zu betreten z.B. "Ja" 
